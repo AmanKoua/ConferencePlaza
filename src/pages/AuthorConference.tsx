@@ -67,7 +67,7 @@ const AuthorConference = () => {
             <input
               className="w-7/12 h-9 shadow-md mt-auto mb-auto p-2"
               type="text"
-              placeholder="Upload paper"
+              placeholder="Paper title"
             />
           </div>
           <div className="w-full h-14 flex flex-row justify-around">
