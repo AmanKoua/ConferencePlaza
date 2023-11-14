@@ -12,6 +12,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/SIgnup";
 import Admin from "./pages/Admin";
 import Conferences from "./pages/Conferences";
+import AuthorConference from "./pages/AuthorConference";
 
 import "./styles.css";
 import "./invisibleScrollbar.css";
@@ -27,6 +28,7 @@ function App() {
             <Route path="/signup" element={<Signup></Signup>} />
             <Route path="/admin" element={<Admin></Admin>} />
             <Route path="/conferences" element={<Conferences />} />
+            <Route path="/author" element={<AuthorConference />} />
           </Routes>
         </div>
       </BrowserRouter>
