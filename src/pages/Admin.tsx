@@ -140,9 +140,11 @@ const Admin = () => {
         <input className="w-7/12 shadow-md" type="text" />
       </div>
       <div className="w-2/4 h-max ml-auto mr-auto">
-        <button className="w-10/12 bg-confButton p-2 text-2xl hover:shadow-xl ml-auto mr-auto mt-5 mb-5">
-          Register Conference & Chair
-        </button>
+        <div className="w-max h-max ml-auto mr-auto">
+          <button className="w-full bg-confButton py-2 px-5 text-2xl hover:shadow-xl mt-5 mb-5">
+            Register Conference & Chair
+          </button>
+        </div>
       </div>
     </div>
   );
