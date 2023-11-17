@@ -7,6 +7,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 
+import Redirect from "./pages/Redirect";
 import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
 import Signup from "./pages/SIgnup";
@@ -24,9 +25,10 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Navbar></Navbar>
+        <Navbar />
         <div>
           <Routes>
+            <Route path="/" element={<Redirect />} />
             <Route path="/login" element={<Login></Login>} />
             <Route path="/signup" element={<Signup></Signup>} />
             <Route path="/admin" element={<Admin></Admin>} />
