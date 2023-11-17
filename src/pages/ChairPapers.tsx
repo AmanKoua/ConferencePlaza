@@ -9,7 +9,7 @@ const ChairPapers = () => {
       <SubmittedPaper
         title="a new paper I just came up with"
         authors={["Aman koua", "Bill smith", "Notorious BIG"]}
-        decision="Pending"
+        decision="Publish"
       />
 
       <div className="w-9/12 h-40 shadow-lg p-2 mt-10 ml-auto mr-auto flex flex-col justify-around align-middle">
@@ -54,21 +54,15 @@ const ChairPapers = () => {
           </h1>
           <div className="w-3/4 h-full flex flex-col">
             <div className="w-full h-4/6 flex flex-row justify-around mt-auto mb-auto">
-              <select className="w-3/12 h-3/4 mt-auto mb-auto">
-                <option>Accept</option>
-                <option>Reject</option>
-                <option>Neutral</option>
-              </select>
-              <select className="w-3/12 h-3/4 mt-auto mb-auto">
-                <option>Accept</option>
-                <option>Reject</option>
-                <option>Neutral</option>
-              </select>
-              <select className="w-3/12 h-3/4 mt-auto mb-auto">
-                <option>Accept</option>
-                <option>Reject</option>
-                <option>Neutral</option>
-              </select>
+              <div className="bg-gray-200 w-3/12 h-3/4 mt-auto mb-auto">
+                <p className="w-max ml-auto mr-auto text-2xl">Pending</p>
+              </div>
+              <div className="bg-gray-200 w-3/12 h-3/4 mt-auto mb-auto">
+                <p className="w-max ml-auto mr-auto text-2xl">Pending</p>
+              </div>
+              <div className="bg-gray-200 w-3/12 h-3/4 mt-auto mb-auto">
+                <p className="w-max ml-auto mr-auto text-2xl">Pending</p>
+              </div>
             </div>
           </div>
         </div>
@@ -144,15 +138,12 @@ const SubmittedPaper = ({ title, authors, decision }: SubmittedPaperProps) => {
           {generateAuthorParagraphs()}
           {/* <p className="text-xl w-max ml-auto mr-auto">{authors}</p> */}
         </div>
-        <div className="w-5/12 h-max mt-auto mb-auto flex flex-row">
-          <select
-            className={`w-full h-8 bg-${recommendationColor}-500`}
-            value={decision}
-          >
-            <option value="Publish">Publish</option>
-            <option value="Do not publish">Do not publish</option>
-            <option value="Pending">Pending</option>
-          </select>
+        <div
+          className={`bg-${recommendationColor}-500 w-5/12 h-10 mt-auto mb-auto flex flex-row`}
+        >
+          <p className="text-2xl w-max ml-auto mr-auto mt-auto mb-auto">
+            {decision}
+          </p>
         </div>
       </div>
     </>

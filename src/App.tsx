@@ -15,6 +15,7 @@ import Conferences from "./pages/Conferences";
 import AuthorConference from "./pages/AuthorConference";
 import Reviewer from "./pages/Reviewer";
 import ChairPapers from "./pages/ChairPapers";
+import ConferenceSubmissions from "./pages/ConferenceSubmissions";
 
 import "./styles.css";
 import "./invisibleScrollbar.css";
@@ -32,6 +33,10 @@ function App() {
             <Route path="/conferences" element={<Conferences />} />
             <Route path="/author" element={<AuthorConference />} />
             <Route path="/reviewer" element={<Reviewer />} />
+            <Route
+              path="/conferenceSubmissions"
+              element={<ConferenceSubmissions />}
+            />
             <Route path="/chairPapers" element={<ChairPapers />} />
           </Routes>
         </div>
