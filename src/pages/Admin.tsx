@@ -9,7 +9,7 @@ const Admin = () => {
   const [conferenceName, setConferenceName] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
-  const [country, setStaet] = useState("");
+  const [country, setCountry] = useState("");
   const [startDay, setStartDay] = useState("");
   const [startMonth, setStartMonth] = useState("");
   const [startYear, setStartYear] = useState("");
@@ -48,7 +48,7 @@ const Admin = () => {
 
       const json = await response.json();
       localStorage.setItem("profile", JSON.stringify(json));
-      console.log(json);
+      // console.log(json);
     })();
   }, []);
 
@@ -89,18 +89,17 @@ const Admin = () => {
 
     try {
       chairJSON = await chairResponse.json();
-      console.log(chairJSON);
+      chairId = chairJSON.message.split("-ChairId-")[1];
     } catch (e) {
       alert("chair was not properly registerd!");
       return;
     }
 
-    return;
-
-    const response = await fetch(backendURL + "/admin/conference", {
+    const confResponse = await fetch(backendURL + "/admin/conference", {
       method: "POST",
       headers: {
         "content-type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         name: conferenceName,
@@ -110,8 +109,21 @@ const Admin = () => {
         startDate: startDate,
         endDate: endDate,
         submissionDeadline: deadline,
+        chairId: chairId,
       }),
     });
+
+    let confJSON = undefined;
+
+    try {
+      confJSON = await confResponse.json();
+      console.log(confJSON);
+    } catch (e) {
+      alert("Error registering new conference!");
+      return;
+    }
+
+    alert("new chair and conference registerd!");
   };
 
   return (
@@ -124,7 +136,13 @@ const Admin = () => {
         <div className="400 w-4/12">
           <h1 className="w-full text-3xl font-light">Conference name</h1>
         </div>
-        <input className="w-7/12 shadow-md" type="text" />
+        <input
+          className="w-7/12 shadow-md"
+          type="text"
+          onChange={(e) => {
+            setConferenceName(e.target.value);
+          }}
+        />
       </div>
       <div className=" w-5/6 h-max ml-auto mr-auto mt-5 flex flex-row justify-around">
         <div className="w-4/12 h-max mt-auto mb-auto">
@@ -137,16 +155,25 @@ const Admin = () => {
             className="w-3/12 h-9 shadow-md mt-auto mb-auto p-2"
             type="text"
             placeholder="city"
+            onChange={(e) => {
+              setCity(e.target.value);
+            }}
           />
           <input
             className="w-3/12 h-9 shadow-md mt-auto mb-auto p-2"
             type="text"
             placeholder="state"
+            onChange={(e) => {
+              setState(e.target.value);
+            }}
           />
           <input
             className="w-3/12 h-9 shadow-md mt-auto mb-auto p-2"
             type="text"
             placeholder="country"
+            onChange={(e) => {
+              setCountry(e.target.value);
+            }}
           />
         </div>
       </div>
@@ -159,16 +186,25 @@ const Admin = () => {
             className="w-3/12 h-9 shadow-md mt-auto mb-auto p-2"
             type="text"
             placeholder="day"
+            onChange={(e) => {
+              setStartDay(e.target.value);
+            }}
           />
           <input
             className="w-3/12 h-9 shadow-md mt-auto mb-auto p-2"
             type="text"
             placeholder="month"
+            onChange={(e) => {
+              setStartMonth(e.target.value);
+            }}
           />
           <input
             className="w-3/12 h-9 shadow-md mt-auto mb-auto p-2"
             type="text"
             placeholder="year"
+            onChange={(e) => {
+              setStartYear(e.target.value);
+            }}
           />
         </div>
       </div>
@@ -181,16 +217,25 @@ const Admin = () => {
             className="w-3/12 h-9 shadow-md mt-auto mb-auto p-2"
             type="text"
             placeholder="day"
+            onChange={(e) => {
+              setEndDay(e.target.value);
+            }}
           />
           <input
             className="w-3/12 h-9 shadow-md mt-auto mb-auto p-2"
             type="text"
             placeholder="month"
+            onChange={(e) => {
+              setEndMonth(e.target.value);
+            }}
           />
           <input
             className="w-3/12 h-9 shadow-md mt-auto mb-auto p-2"
             type="text"
             placeholder="year"
+            onChange={(e) => {
+              setEndYear(e.target.value);
+            }}
           />
         </div>
       </div>
@@ -205,16 +250,25 @@ const Admin = () => {
             className="w-3/12 h-9 shadow-md mt-auto mb-auto p-2"
             type="text"
             placeholder="day"
+            onChange={(e) => {
+              setDeadDay(e.target.value);
+            }}
           />
           <input
             className="w-3/12 h-9 shadow-md mt-auto mb-auto p-2"
             type="text"
             placeholder="month"
+            onChange={(e) => {
+              setDeadMonth(e.target.value);
+            }}
           />
           <input
             className="w-3/12 h-9 shadow-md mt-auto mb-auto p-2"
             type="text"
             placeholder="year"
+            onChange={(e) => {
+              setDeadYear(e.target.value);
+            }}
           />
         </div>
       </div>
