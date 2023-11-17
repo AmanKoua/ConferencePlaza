@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import backendURL from "../backendURL";
 
 const Conferences = () => {
@@ -40,6 +41,7 @@ const Conferences = () => {
         {conferences.map((conference, idx) => (
           <ConferenceEntry
             key={idx}
+            id={conference.id}
             name={conference.name}
             deadline={conference.submissionDeadline}
           ></ConferenceEntry>
@@ -65,13 +67,21 @@ const Conferences = () => {
 };
 
 interface ConferenceProps {
+  id: number;
   name: string;
   deadline: string;
 }
 
-const ConferenceEntry = ({ name, deadline }: ConferenceProps) => {
+const ConferenceEntry = ({ id, name, deadline }: ConferenceProps) => {
+  const navigate = useNavigate();
+
   return (
-    <div className="bg-confButton w-3/4 h-18 shadow-lg p-2 mt-5 ml-auto mr-auto flex flex-row justify-around align-middle">
+    <div
+      className="bg-confButton w-3/4 h-18 shadow-lg p-2 mt-5 ml-auto mr-auto flex flex-row justify-around align-middle hover:shadow-xl"
+      onClick={() => {
+        navigate(`/author/${id}`);
+      }}
+    >
       <div className="w-5/12 h-max mt-auto mb-auto">
         <p className="text-xl">{name}</p>
       </div>

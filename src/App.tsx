@@ -33,7 +33,7 @@ function App() {
             <Route path="/signup" element={<Signup></Signup>} />
             <Route path="/admin" element={<Admin></Admin>} />
             <Route path="/conferences" element={<Conferences />} />
-            <Route path="/author" element={<AuthorConference />} />
+            <Route path="/author/:id" element={<AuthorConference />} />
             <Route path="/reviewer" element={<Reviewer />} />
             <Route
               path="/conferenceSubmissions"
