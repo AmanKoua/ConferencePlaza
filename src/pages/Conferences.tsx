@@ -1,6 +1,53 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import backendURL from "../backendURL";
 
 const Conferences = () => {
+  const [conferences, setConferences] = useState([]);
+
+  useEffect(() => {
+    if (!localStorage.getItem("user")) {
+      alert("cannot fetch conferences because user is not logged in!");
+      return;
+    }
+
+    const getConferences = async () => {
+      const user = JSON.parse(localStorage.getItem("user")!);
+
+      const response = await fetch(backendURL + "/user/conferences", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+
+      let json = undefined;
+
+      try {
+        json = await response.json();
+        setConferences(json.conferences);
+        console.log(json.conferences);
+      } catch (e) {
+        alert("Failed to get conferences");
+      }
+    };
+
+    getConferences();
+  }, []);
+
+  const generateConferenceEntries = (): JSX.Element => {
+    return (
+      <>
+        {conferences.map((conference, idx) => (
+          <ConferenceEntry
+            key={idx}
+            name={conference.name}
+            deadline={conference.submissionDeadline}
+          ></ConferenceEntry>
+        ))}
+      </>
+    );
+  };
+
   return (
     <div className="bg-gradient-to-b from-confPrimary to-gray-100 w-9/12 ml-auto mr-auto h-screen overflow-y-scroll hide-scrollbar">
       <div className="w-max ml-auto mr-auto pt-20">
@@ -11,22 +58,7 @@ const Conferences = () => {
           <h1 className="text-3xl font-light">Conference Name</h1>
           <h1 className="text-3xl font-light">Sumission Deadline</h1>
         </div>
-        <ConferenceEntry
-          name="this is a temporary name to test the heccin UI. THis looks good to go"
-          deadline="April 5th 2034"
-        ></ConferenceEntry>
-        <ConferenceEntry
-          name="this is a temporary name to test the heccin UI. THis looks good to go"
-          deadline="April 5th 2034"
-        ></ConferenceEntry>{" "}
-        <ConferenceEntry
-          name="this is a temporary name to test the heccin UI. THis looks good to go"
-          deadline="April 5th 2034"
-        ></ConferenceEntry>{" "}
-        <ConferenceEntry
-          name="this is a temporary name to test the heccin UI. THis looks good to go"
-          deadline="April 5th 2034"
-        ></ConferenceEntry>
+        {generateConferenceEntries()}
       </div>
     </div>
   );

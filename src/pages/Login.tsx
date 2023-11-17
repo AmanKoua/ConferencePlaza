@@ -19,6 +19,8 @@ const Login = () => {
       }),
     });
 
+    let isLoginFailed = false;
+
     try {
       const json = await response.json();
       localStorage.setItem("user", JSON.stringify(json));
@@ -30,12 +32,43 @@ const Login = () => {
         case "Admin":
           navigate("/admin");
           break;
+        case "Author":
+          navigate("/conferences");
+          break;
         default:
           return;
       }
     } catch (e) {
+      isLoginFailed = true;
       alert("login failed");
     }
+
+    if (isLoginFailed) {
+      return;
+    }
+
+    // fetch user profile after login
+
+    if (!localStorage.getItem("user")) {
+      alert("cannot retrieve admin profile (not logged in)!");
+      return;
+    }
+
+    (async () => {
+      let user = JSON.parse(localStorage.getItem("user")!);
+
+      const response = await fetch(backendURL + "/user", {
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+
+      const json = await response.json();
+      localStorage.setItem("profile", JSON.stringify(json));
+      // console.log(json);
+    })();
   };
 
   return (
