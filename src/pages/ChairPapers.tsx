@@ -93,8 +93,14 @@ const ChairPapers = () => {
 
       try {
         json = await response.json();
-        // console.log(json);
-        setReviewProgress(json);
+        let tempReviewProgress = json;
+
+        if (tempReviewProgress.length >= 6) {
+          // workaround
+          tempReviewProgress.splice(0, 3);
+        }
+
+        setReviewProgress(tempReviewProgress);
       } catch (e) {
         alert("Error fetching paper review progress");
         return;
@@ -148,7 +154,7 @@ const ChairPapers = () => {
     }
 
     const tempReview = reviewProgress[idx];
-    console.log(tempReview);
+    // console.log(tempReview);
     let bgColor = undefined;
 
     switch (tempReview.status) {
@@ -162,7 +168,7 @@ const ChairPapers = () => {
         bgColor = "red";
         break;
       case "Neutral":
-        bgColor = "red";
+        bgColor = "yellow";
         break;
       default:
         break;
@@ -212,6 +218,120 @@ const ChairPapers = () => {
         console.log(json);
       } catch (e) {
         alert("Error setting reviewer");
+        return;
+      }
+    })();
+  };
+
+  const generateAutomatedRecommendation = (): JSX.Element => {
+    let acceptCount = 0;
+    let rejectCount = 0;
+    let neutralCount = 0;
+
+    for (let i = 0; i < reviewProgress.length; i++) {
+      if (reviewProgress[i].status == "Pending") {
+        return (
+          <div className="bg-gray-500 w-2/12 h-max py-5 mt-5 ml-auto mr-auto text-center text-2xl">
+            N/A
+          </div>
+        );
+      } else {
+        switch (reviewProgress[i].status) {
+          case "Accept":
+            acceptCount++;
+            break;
+          case "Reject":
+            rejectCount++;
+            break;
+          case "Neutral":
+            neutralCount++;
+            break;
+        }
+      }
+    }
+
+    if (neutralCount + rejectCount >= 2) {
+      return (
+        <div className="bg-red-500 w-2/12 h-max py-5 mt-5 ml-auto mr-auto text-center text-2xl">
+          Do not publish
+        </div>
+      );
+    } else if (acceptCount == 3) {
+      return (
+        <div className="bg-green-500 w-2/12 h-max py-5 mt-5 ml-auto mr-auto text-center text-2xl">
+          Publish
+        </div>
+      );
+    } else {
+      return (
+        <div className="bg-gray-300 w-2/12 h-max py-5 mt-5 ml-auto mr-auto text-center text-2xl">
+          Pending
+        </div>
+      );
+    }
+  };
+
+  const handleChairDecision = (isPublish: boolean) => {
+    if (reviewProgress.length == 0) {
+      alert("Cannot make final decision until all reviewers have reviewed!");
+      return;
+    }
+
+    let acceptCount = 0;
+    let rejectCount = 0;
+    let neutralCount = 0;
+
+    for (let i = 0; i < reviewProgress.length; i++) {
+      if (reviewProgress[i].status == "Pending") {
+        alert("Cannot make final decision until all reviewers have reviewed!");
+        return;
+      } else {
+        switch (reviewProgress[i].status) {
+          case "Accept":
+            acceptCount++;
+            break;
+          case "Reject":
+            rejectCount++;
+            break;
+          case "Neutral":
+            neutralCount++;
+            break;
+        }
+      }
+    }
+
+    if (neutralCount + acceptCount + rejectCount != 3) {
+      alert("Cannot make final decision until all reviewers have reviewed!");
+      return;
+    }
+
+    if (!localStorage.getItem("user")) {
+      return;
+    }
+
+    let user = JSON.parse(localStorage.getItem("user")!);
+    let token = user.token;
+    let decision = isPublish ? "Publish" : "Do not publish";
+
+    (async () => {
+      let response = await fetch(backendURL + "/user/chair/paper-decision", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          paperId: id,
+          decision: decision,
+        }),
+      });
+
+      let json = undefined;
+      try {
+        json = await response.json();
+        console.log(json);
+      } catch (e) {
+        alert("Error setting paper decision");
         return;
       }
     })();
@@ -278,17 +398,25 @@ const ChairPapers = () => {
       <div className="w-max ml-auto mr-auto pt-10">
         <h1 className="text-5xl font-light">Automated Recommendation</h1>
       </div>
-      <div className="bg-red-500 w-2/12 h-max py-5 mt-5 ml-auto mr-auto text-center text-2xl">
-        Do not publish
-      </div>
+      {generateAutomatedRecommendation()}
       <div className="w-max ml-auto mr-auto pt-5 pb-5">
         <h1 className="text-5xl font-light">Enter final decision</h1>
       </div>
       <div className="w-full h-max flex flex-row mb-14 justify-around">
-        <button className="bg-confPrimary shadow-md hover:shadow-xl pt-1 pb-1 pl-5 pr-5 text-2xl">
+        <button
+          className="bg-confPrimary shadow-md hover:shadow-xl pt-1 pb-1 pl-5 pr-5 text-2xl"
+          onClick={() => {
+            handleChairDecision(true);
+          }}
+        >
           Publish
         </button>
-        <button className="bg-confPrimary shadow-md hover:shadow-xl pt-1 pb-1 pl-5 pr-5 text-2xl">
+        <button
+          className="bg-confPrimary shadow-md hover:shadow-xl pt-1 pb-1 pl-5 pr-5 text-2xl"
+          onClick={() => {
+            handleChairDecision(false);
+          }}
+        >
           Do not publish
         </button>
       </div>
@@ -332,8 +460,6 @@ const SubmittedPaper = ({ title, authors, decision }: SubmittedPaperProps) => {
         ))}
       </>
     );
-
-    return <></>;
   };
 
   return (
