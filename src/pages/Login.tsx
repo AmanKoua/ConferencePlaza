@@ -35,6 +35,12 @@ const Login = () => {
         case "Author":
           navigate("/conferences");
           break;
+        case "Chair":
+          navigate("/conferenceSubmissions");
+          break;
+        case "Reviewer":
+          navigate("/reviewer");
+          break;
         default:
           return;
       }

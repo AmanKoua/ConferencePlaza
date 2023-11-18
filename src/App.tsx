@@ -39,7 +39,7 @@ function App() {
               path="/conferenceSubmissions"
               element={<ConferenceSubmissions />}
             />
-            <Route path="/chairPapers" element={<ChairPapers />} />
+            <Route path="/chairPapers/:id" element={<ChairPapers />} />
           </Routes>
         </div>
       </BrowserRouter>

@@ -84,7 +84,7 @@ const AuthorConference = () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        paperData: mockPaperData,
+        paperData: "some sample data here",
         paperTitle: title,
         coAuthors: authors.replaceAll(" ", "").split(","),
         conferenceId: id,
